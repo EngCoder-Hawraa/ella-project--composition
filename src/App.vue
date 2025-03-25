@@ -1,17 +1,20 @@
+<!--Composition API-->
+<script setup>
+import { defineComponent } from "vue";
+import AppLayout from "@/components/global/AppLayout.vue";
+
+// Using Composition API
+defineComponent({
+  components: {
+    AppLayout,
+  },
+});
+</script>
 <template>
   <app-layout>
     <router-view />
   </app-layout>
 </template>
-<!--Options API-->
-<script>
-import AppLayout from "@/components/global/AppLayout.vue";
-export default {
-  components: {
-    AppLayout,
-  },
-};
-</script>
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

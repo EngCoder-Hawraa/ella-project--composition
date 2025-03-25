@@ -1,50 +1,3 @@
-<template>
-  <div class="top-cat">
-    <div class="cyber-banner">
-      <img src="@/assets/images/cyber-banner.webp" class="w-100" alt="" />
-    </div>
-    <div class="categories pt-13">
-      <div class="title d-flex justify-center align-center px-5 mb-3">
-        <h3
-          class="text-center flex-grow-1"
-          style="font-weight: 900; font-size: 20px"
-        >
-          Top Categories
-        </h3>
-        <a href="#" class="text-black">Shop All</a>
-      </div>
-      <v-container fluid>
-        <v-row>
-          <v-col cols="2" v-for="cat in categories" :key="cat.title">
-            <v-card class="text-center py-3 px-2" elevation="0"
-              ><v-hover v-slot="{ isHovering, props }">
-                <div
-                  class="img-parent"
-                  style="
-                    overflow: hidden;
-                    width: 100%;
-                    height: 270px;
-                    border-radius: 50%;
-                  "
-                >
-                  <img
-                    v-bind="props"
-                    :style="`cursor: pointer;height:100%;width:100%;
-                    transition: 0.4s all ease-in-out;
-                    scale: ${isHovering ? 1.05 : 1};`"
-                    :src="cat.image"
-                    alt=""
-                  />
-                </div>
-              </v-hover>
-              <v-card-text>{{ cat.title }}</v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </div>
-  </div>
-</template>
 <!--Composition API-->
 <script setup>
 import { ref } from "vue";
@@ -112,5 +65,51 @@ const categories = ref([
   },
 ]);
 </script>
-
+<template>
+  <div class="top-cat">
+    <div class="cyber-banner">
+      <img src="@/assets/images/cyber-banner.webp" class="w-100" alt="" />
+    </div>
+    <div class="categories pt-13">
+      <div class="title d-flex justify-center align-center px-5 mb-3">
+        <h3
+          class="text-center flex-grow-1"
+          style="font-weight: 900; font-size: 20px"
+        >
+          Top Categories
+        </h3>
+        <a href="#" class="text-black">Shop All</a>
+      </div>
+      <v-container fluid>
+        <v-row>
+          <v-col cols="2" v-for="cat in categories" :key="cat.title">
+            <v-card class="text-center py-3 px-2" elevation="0"
+              ><v-hover v-slot="{ isHovering, props }">
+                <div
+                  class="img-parent"
+                  style="
+                    overflow: hidden;
+                    width: 100%;
+                    height: 270px;
+                    border-radius: 50%;
+                  "
+                >
+                  <img
+                    v-bind="props"
+                    :style="`cursor: pointer;height:100%;width:100%;
+                    transition: 0.4s all ease-in-out;
+                    scale: ${isHovering ? 1.05 : 1};`"
+                    :src="cat.image"
+                    alt=""
+                  />
+                </div>
+              </v-hover>
+              <v-card-text>{{ cat.title }}</v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+  </div>
+</template>
 <style scoped lang="scss"></style>

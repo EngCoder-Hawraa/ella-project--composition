@@ -2,31 +2,31 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 
-// Pinia config
+// تكوين Pinia
 import { createPinia } from "pinia";
 
-// Emitter Config
+// تكوين Emitter
 import mitt from "mitt";
 const Emitter = mitt();
 
-// Swiper Config
+// تكوين Swiper
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-// Vuetify
+// تكوين Vuetify
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
-import { aliases, mdi } from "vuetify/iconsets/mdi"; // Use Material Design Icons
+import { aliases, mdi } from "vuetify/iconsets/mdi"; // استخدام أيقونات Material Design
 import "@mdi/font/css/materialdesignicons.css";
 
 const vuetify = createVuetify({
   components,
   directives,
   icons: {
-    defaultSet: "mdi", // Ensure default icon set is defined
+    defaultSet: "mdi", // التأكد من تعريف مجموعة الأيقونات الافتراضية
     aliases,
     sets: {
       mdi,
@@ -36,11 +36,12 @@ const vuetify = createVuetify({
 
 const app = createApp(App);
 
-// Proper initialization order
+// طريقة Composition API
 app.use(createPinia());
-app.provide("Emitter", Emitter);
+app.provide("Emitter", Emitter); // توفير Emitter بشكل عام
+
 app.use(router);
 app.use(vuetify);
 
-// Mount the app
+// تثبيت التطبيق
 app.mount("#app");

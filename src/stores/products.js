@@ -1,31 +1,57 @@
 import { defineStore } from "pinia";
+import { ref } from "vue";
 import axios from "axios";
 
-export const useProductsStore = defineStore("useProductsStore", {
-  state: () => ({
-    flashDeals: [],
-    newProducts: [],
-    fragrances: [],
-    furniture: [],
-  }),
-  actions: {
-    async getProducts() {
-      await axios
-        .get("https://dummyjson.com/products")
-        .then((res) => {
-          console.log(res.data.products);
-          this.newProducts = res.data.products.filter(
-            (el) => el.category === "beauty"
-          );
-          this.flashDeals = res.data.products.slice(0, 8);
-          this.fragrances = res.data.products.filter(
-            (el) => el.category === "fragrances"
-          );
-          this.furniture = res.data.products.filter(
-            (el) => el.category === "furniture"
-          );
-        })
-        .catch((err) => console.log(err));
-    },
-  },
+export const useProductsStore = defineStore("products", () => {
+  const flashDeals = ref([]);
+  const newProducts = ref([]);
+  const fragrances = ref([]);
+  const furniture = ref([]);
+  const categoryProducts = ref([]);
+  const categories = ref([
+    { title: "Beauty", route: "beauty" },
+    { title: "Fragrances", route: "fragrances" },
+    { title: "Furniture", route: "furniture" },
+    { title: "Groceries", route: "groceries" },
+  ]);
+
+  const getProducts = async () => {
+    try {
+      const { data } = await axios.get("https://dummyjson.com/products");
+      newProducts.value = data.products.filter(
+        (el) => el.category === "beauty"
+      );
+      flashDeals.value = data.products.slice(0, 8);
+      fragrances.value = data.products.filter(
+        (el) => el.category === "fragrances"
+      );
+      furniture.value = data.products.filter(
+        (el) => el.category === "furniture"
+      );
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  const getProductsByCategory = async (category) => {
+    try {
+      const { data } = await axios.get(
+        `https://dummyjson.com/products/category/${category}`
+      );
+      categoryProducts.value = data;
+    } catch (error) {
+      console.error("Error fetching category products:", error);
+    }
+  };
+
+  return {
+    flashDeals,
+    newProducts,
+    fragrances,
+    furniture,
+    categoryProducts,
+    categories,
+    getProducts,
+    getProductsByCategory,
+  };
 });

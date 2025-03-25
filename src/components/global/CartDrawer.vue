@@ -1,15 +1,3 @@
-<template>
-  <div class="drawer">
-    <v-navigation-drawer location="right" temporary v-model="drawer">
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, autem
-        cumque delectus doloremque fuga ipsam iure mollitia odio officia optio
-        perferendis praesentium quam recusandae repellendus sequi vero voluptas,
-        voluptatibus voluptatum.
-      </p>
-    </v-navigation-drawer>
-  </div>
-</template>
 <!--Composition API-->
 <script setup>
 import { inject, ref, onMounted } from "vue";
@@ -27,4 +15,16 @@ onMounted(() => {
   });
 });
 </script>
+<template>
+  <div class="drawer">
+    <v-navigation-drawer location="right" temporary v-model="drawer">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, autem
+        cumque delectus doloremque fuga ipsam iure mollitia odio officia optio
+        perferendis praesentium quam recusandae repellendus sequi vero voluptas,
+        voluptatibus voluptatum.
+      </p>
+    </v-navigation-drawer>
+  </div>
+</template>
 <style scoped lang="scss"></style>

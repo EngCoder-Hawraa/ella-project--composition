@@ -1,3 +1,27 @@
+<!--Composition API-->
+<script setup>
+import { onMounted, computed } from "vue";
+import { useProductsStore } from "@/stores/products";
+import UpperBanner from "@/components/home_page/UpperBanner.vue";
+import TheFeatures from "@/components/home_page/TheFeatures.vue";
+import TopOffers from "@/components/home_page/TopOffers.vue";
+import ProductsComponent from "@/components/home_page/ProductsSwiper.vue";
+import TopCats from "@/components/home_page/TopCategories.vue";
+import NewProducts from "@/components/home_page/NewProducts.vue";
+import QualityFeatures from "@/components/home_page/QualityFeatures.vue";
+import WhyShopwithus from "@/components/home_page/WhyShopwithus.vue";
+
+const productsStore = useProductsStore();
+
+const flashDeals = computed(() => productsStore.flashDeals);
+const newProducts = computed(() => productsStore.newProducts);
+const fragrances = computed(() => productsStore.fragrances);
+const furniture = computed(() => productsStore.furniture);
+
+onMounted(async () => {
+  await productsStore.getProducts();
+});
+</script>
 <template>
   <div class="home">
     <UpperBanner />
@@ -42,28 +66,3 @@
     <WhyShopwithus />
   </div>
 </template>
-
-<!--Composition API-->
-<script setup>
-import { onMounted, computed } from "vue";
-import { useProductsStore } from "@/stores/products";
-import UpperBanner from "@/components/home_page/UpperBanner.vue";
-import TheFeatures from "@/components/home_page/TheFeatures.vue";
-import TopOffers from "@/components/home_page/TopOffers.vue";
-import ProductsComponent from "@/components/home_page/ProductsSwiper.vue";
-import TopCats from "@/components/home_page/TopCategories.vue";
-import NewProducts from "@/components/home_page/NewProducts.vue";
-import QualityFeatures from "@/components/home_page/QualityFeatures.vue";
-import WhyShopwithus from "@/components/home_page/WhyShopwithus.vue";
-
-const productsStore = useProductsStore();
-
-const flashDeals = computed(() => productsStore.flashDeals);
-const newProducts = computed(() => productsStore.newProducts);
-const fragrances = computed(() => productsStore.fragrances);
-const furniture = computed(() => productsStore.furniture);
-
-onMounted(async () => {
-  await productsStore.getProducts();
-});
-</script>

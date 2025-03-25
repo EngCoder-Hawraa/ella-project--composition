@@ -1,3 +1,5 @@
+<!--Composition API-->
+<script setup></script>
 <template>
   <div class="shop-withus py-14">
     <div class="title">
@@ -93,7 +95,6 @@
     </v-container>
   </div>
 </template>
-<script setup></script>
 <style lang="scss">
 .shop-withus {
   background-image: url("../../assets/images/why-shop-with-us-banner.webp");

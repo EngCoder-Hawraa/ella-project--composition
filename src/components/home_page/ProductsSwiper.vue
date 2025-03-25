@@ -1,3 +1,23 @@
+<!--Composition API-->
+<script setup>
+import { ref } from "vue";
+import { defineProps } from "vue";
+
+import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+import { Pagination, Navigation, Autoplay } from "swiper";
+import { VSkeletonLoader } from "vuetify/components";
+
+// تعريف المتغيرات التفاعلية
+const showenItem = ref({});
+
+// تعريف الـ modules
+const modules = [Pagination, Navigation, Autoplay];
+
+// استلام الـ props
+defineProps({
+  products: Array,
+});
+</script>
 <template>
   <div class="products-swiper pt-16 pb-5">
     <div class="title mb-10 px-5 d-flex align-center justify-space-between">
@@ -112,28 +132,6 @@
     </Swiper>
   </div>
 </template>
-
-<!--Composition API-->
-<script setup>
-import { ref } from "vue";
-import { defineProps } from "vue";
-
-import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-import { Pagination, Navigation, Autoplay } from "swiper";
-import { VSkeletonLoader } from "vuetify/components";
-
-// تعريف المتغيرات التفاعلية
-const showenItem = ref({});
-
-// تعريف الـ modules
-const modules = [Pagination, Navigation, Autoplay];
-
-// استلام الـ props
-defineProps({
-  products: Array,
-});
-</script>
-
 <style lang="scss">
 .products-swiper {
   .swiper-button-next,

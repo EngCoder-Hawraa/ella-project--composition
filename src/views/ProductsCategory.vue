@@ -1,43 +1,66 @@
 <!--Composition API-->
 <script setup>
-import { ref, defineProps } from "vue";
-import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-import { Pagination } from "swiper";
+import { ref, computed, watch, onMounted } from "vue";
+import { useProductsStore } from "@/stores/products";
 import { VSkeletonLoader } from "vuetify/components";
+import { useRoute } from "vue-router";
 
-const props = defineProps({
-  products: Array,
-});
-
-const modules = [Pagination];
+// بيانات تفاعلية
 const showenItem = ref({});
+const loading = ref(false);
+
+// استخدام المتجر من Pinia
+const productsStore = useProductsStore();
+
+// استخدام computed للوصول إلى الحالة في المتجر
+const categoryProducts = computed(() => productsStore.categoryProducts);
+
+// دالة جلب المنتجات حسب الفئة
+const getProductsByCategory = async (category) => {
+  loading.value = true;
+  await productsStore.getProductsByCategory(category);
+  loading.value = false;
+};
+
+// مراقبة التغيرات في الـ route
+const route = useRoute();
+watch(
+  () => route.params.category,
+  async () => {
+    document.documentElement.scrollTo(0, 0);
+    loading.value = true;
+    await getProductsByCategory(route.params.category);
+    loading.value = false;
+  }
+);
+
+// استدعاء المنتجات عند تحميل المكون
+onMounted(async () => {
+  loading.value = true;
+  await getProductsByCategory(route.params.category);
+  loading.value = false;
+});
 </script>
 <template>
-  <div class="new-products pt-12">
-    <div class="title px-5 d-flex align-center justify-space-between">
-      <h2 style="font-weight: 900; font-size: 30px">New Products</h2>
-      <a href="#" class="text-black" style="font-size: 14px">Shop All</a>
-    </div>
-    <v-container fluid>
-      <v-row>
-        <v-col cols="7" v-if="!products.length" class="pt-14">
-          <v-row>
-            <v-col cols="4" v-for="num in 3" :key="num">
-              <v-skeleton-loader
-                type="image, article, button"
-              ></v-skeleton-loader>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="7" class="pt-14" v-else>
-          <Swiper
-            :pagination="{ el: '.swiper-pagination', clickable: true }"
-            :modules="modules"
-            :slides-per-view="3"
-            :space-between="20"
-            class="pb-9 px-5"
+  <div class="products-category mt-10">
+    <h1 class="text-center">{{ $route.params.title }}</h1>
+    <v-container>
+      <v-card :loading="loading" class="pt-5" min-height="700px" elevation="0">
+        <v-row v-if="loading">
+          <v-col cols="3" v-for="num in 4" :key="num">
+            <v-skeleton-loader
+              type="image, article, button"
+            ></v-skeleton-loader>
+          </v-col>
+        </v-row>
+        <v-row v-if="!loading">
+          <v-col
+            cols="3"
+            v-for="item in categoryProducts.products"
+            :key="item.id"
+            class="px-5"
           >
-            <swiper-slide v-for="item in props.products" :key="item.id">
+            <v-lazy>
               <v-card elevation="0" class="pb-5">
                 <v-hover v-slot="{ isHovering, props }">
                   <div
@@ -112,25 +135,19 @@ const showenItem = ref({});
                 <div class="mt-5">
                   <v-btn
                     density="compact"
-                    class="py-2 px-7"
+                    width="220"
+                    height="35"
                     style="text-transform: none; border-radius: 30px"
                     variant="outlined"
                     >Choose Options</v-btn
                   >
                 </div>
               </v-card>
-            </swiper-slide>
-            <div class="swiper-prev"></div>
-            <div class="swiper-next"></div>
-            <div class="swiper-pagination"></div>
-          </Swiper>
-        </v-col>
-        <v-col cols="5">
-          <img src="@/assets/images/vr-banner.webp" class="w-100" alt="" />
-        </v-col>
-      </v-row>
+            </v-lazy>
+          </v-col>
+        </v-row>
+      </v-card>
     </v-container>
   </div>
 </template>
-
 <style scoped lang="scss"></style>

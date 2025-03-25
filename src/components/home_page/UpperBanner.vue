@@ -1,3 +1,5 @@
+<!--Composition API-->
+<script setup></script>
 <template>
   <div class="banner">
     <div class="parent">
@@ -22,7 +24,6 @@
     </div>
   </div>
 </template>
-<script setup></script>
 <style scoped lang="scss">
 .banner {
   .parent {

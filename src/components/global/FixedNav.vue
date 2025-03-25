@@ -1,26 +1,54 @@
+<!--Composition API-->
+<script setup>
+import { inject } from "vue";
+import { useProductsStore } from "@/stores/products";
+import { storeToRefs } from "pinia";
+
+// Inject the Emitter
+const Emitter = inject("Emitter");
+
+// Define the openCart function
+const openCart = () => {
+  Emitter.emit("openCart");
+};
+
+// جلب البيانات من Pinia باستخدام storeToRefs
+const store = useProductsStore();
+const { categories } = storeToRefs(store);
+</script>
 <template>
   <div class="fixed-nav">
     <v-app-bar color="#02218f">
       <v-container fluid>
         <v-row>
           <v-col cols="2">
-            <img class="w-50" src="@/assets/images/logo.png" alt="" />
+            <img
+              class="w-50"
+              src="@/assets/images/logo.png"
+              alt=""
+              @click="$router.push({ name: 'home' })"
+              style="cursor: pointer"
+            />
           </v-col>
-          <v-col cols="5">
+          <v-col cols="7">
             <ul
               class="links d-flex text-white justify-space-between"
               style="list-style: none"
             >
-              <li>Theme Demo</li>
-              <li>Shop</li>
-              <li>Product</li>
-              <li>New In</li>
-              <li>Must Have</li>
-              <li>Collections</li>
+              <li v-for="category in categories" :key="category.title">
+                <router-link
+                  :to="{
+                    name: 'products_category',
+                    params: { category: category.route, title: category.title },
+                  }"
+                  style="color: white; text-decoration: none"
+                  >{{ category.title }}</router-link
+                >
+              </li>
             </ul>
           </v-col>
           <v-col
-            cols="5"
+            cols="3"
             class="d-flex justify-end align-center"
             style="gap: 20px"
           >
@@ -66,19 +94,4 @@
     </v-app-bar>
   </div>
 </template>
-<!--Composition API-->
-<script setup>
-import { inject } from "vue";
-
-// Inject the Emitter
-const Emitter = inject("Emitter");
-
-// Define the openCart function
-const openCart = () => {
-  if (Emitter) {
-    Emitter.emit("openCart");
-  }
-};
-</script>
-
 <style scoped lang="scss"></style>

@@ -1,3 +1,5 @@
+<!--Composition API-->
+<script setup></script>
 <template>
   <div class="features">
     <v-container>
@@ -72,7 +74,6 @@
     </v-container>
   </div>
 </template>
-<script setup></script>
 <style scoped lang="scss">
 .features {
   .second {

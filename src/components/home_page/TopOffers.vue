@@ -1,3 +1,5 @@
+<script setup></script>
+
 <template>
   <div class="top-offers bg-grey-lighten-4 py-9">
     <v-container fluid>
@@ -93,6 +95,5 @@
     </v-container>
   </div>
 </template>
-<script setup></script>
 
 <style scoped lang="scss"></style>
