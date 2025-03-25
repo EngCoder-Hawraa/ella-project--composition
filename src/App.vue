@@ -1,17 +1,22 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <app-layout>
+    <router-view />
+  </app-layout>
 </template>
-
+<!--Options API-->
+<script>
+import AppLayout from "@/components/global/AppLayout.vue";
+export default {
+  components: {
+    AppLayout,
+  },
+};
+</script>
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 
@@ -26,5 +31,8 @@ nav {
       color: #42b983;
     }
   }
+}
+.v-rating__wrapper {
+  margin-right: 5px;
 }
 </style>
