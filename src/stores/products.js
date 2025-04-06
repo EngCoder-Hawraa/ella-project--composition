@@ -8,6 +8,7 @@ export const useProductsStore = defineStore("products", () => {
   const fragrances = ref([]);
   const furniture = ref([]);
   const categoryProducts = ref([]);
+  const singleProduct = ref({});
   const categories = ref([
     { title: "Beauty", route: "beauty" },
     { title: "Fragrances", route: "fragrances" },
@@ -44,14 +45,27 @@ export const useProductsStore = defineStore("products", () => {
     }
   };
 
+  const getSingleProduct = async (productId) => {
+    try {
+      const { data } = await axios.get(
+        `https://dummyjson.com/products/${productId}`
+      );
+      singleProduct.value = data;
+    } catch (error) {
+      console.error("Error fetching single product:", error);
+    }
+  };
+
   return {
     flashDeals,
     newProducts,
     fragrances,
     furniture,
     categoryProducts,
+    singleProduct,
     categories,
     getProducts,
     getProductsByCategory,
+    getSingleProduct,
   };
 });

@@ -115,6 +115,12 @@ const showenItem = ref({});
                     class="py-2 px-7"
                     style="text-transform: none; border-radius: 30px"
                     variant="outlined"
+                    @click="
+                      $router.push({
+                        name: 'products_details', // ✅ corrected name
+                        params: { productId: item.id },
+                      })
+                    "
                     >Choose Options</v-btn
                   >
                 </div>
