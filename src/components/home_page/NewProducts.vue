@@ -1,6 +1,6 @@
 <!--Composition API-->
 <script setup>
-import { ref, defineProps } from "vue";
+import { inject, ref, defineProps } from "vue";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import { Pagination } from "swiper";
 import { VSkeletonLoader } from "vuetify/components";
@@ -11,6 +11,14 @@ const props = defineProps({
 
 const modules = [Pagination];
 const showenItem = ref({});
+
+// Injected global emitter
+const Emitter = inject("Emitter");
+
+// Composition API: Methods
+function openQuickView(product) {
+  Emitter?.emit("openQuickView", product);
+}
 </script>
 <template>
   <div class="new-products pt-12">
@@ -57,6 +65,26 @@ const showenItem = ref({});
                       alt=""
                       v-bind="props"
                     />
+                    <v-btn
+                      density="compact"
+                      width="60"
+                      height="30"
+                      variant="outlined"
+                      class="bg-white quick-view-btn"
+                      style="
+                        text-transform: none;
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
+                        border-radius: 30px;
+                        font-size: 12px;
+                        transition: 0.2s all ease-in-out;
+                        opacity: 0;
+                      "
+                      @click="openQuickView(item)"
+                      >Quick View</v-btn
+                    >
                   </div>
                 </v-hover>
                 <v-card-text class="pl-0 pb-1">
@@ -139,4 +167,12 @@ const showenItem = ref({});
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.new-products {
+  .img-parent:hover {
+    .quick-view-btn {
+      opacity: 1 !important;
+    }
+  }
+}
+</style>

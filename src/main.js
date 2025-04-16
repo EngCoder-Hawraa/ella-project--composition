@@ -1,3 +1,12 @@
+// هذا يمنع ظهور الخطأ "ResizeObserver loop limit exceeded" في بيئة التطوير
+// if (process.env.NODE_ENV === "development") {
+//   window.addEventListener("error", (e) => {
+//     if (e.message.includes("ResizeObserver loop")) {
+//       e.stopImmediatePropagation();
+//     }
+//   });
+// }
+
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";

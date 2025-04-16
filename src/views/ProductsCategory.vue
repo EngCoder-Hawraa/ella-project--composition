@@ -1,6 +1,6 @@
 <!--Composition API-->
 <script setup>
-import { ref, computed, watch, onMounted } from "vue";
+import { inject, ref, computed, watch, onMounted } from "vue";
 import { useProductsStore } from "@/stores/products";
 import { VSkeletonLoader } from "vuetify/components";
 import { useRoute } from "vue-router";
@@ -40,12 +40,20 @@ onMounted(async () => {
   await getProductsByCategory(route.params.category);
   loading.value = false;
 });
+
+// Injected global emitter
+const Emitter = inject("Emitter");
+
+// Composition API: Methods
+function openQuickView(product) {
+  Emitter?.emit("openQuickView", product);
+}
 </script>
 <template>
   <div class="products-category mt-10">
     <h1 class="text-center">{{ $route.params.title }}</h1>
     <v-container>
-      <v-card :loading="loading" class="pt-5" min-height="700px" elevation="0">
+      <v-card class="pt-5" min-height="700px" elevation="0">
         <v-row v-if="loading">
           <v-col cols="3" v-for="num in 4" :key="num">
             <v-skeleton-loader
@@ -64,7 +72,7 @@ onMounted(async () => {
               <v-card elevation="0" class="pb-5">
                 <v-hover v-slot="{ isHovering, props }">
                   <div
-                    class="img-parent"
+                    class="img-parent position-relative"
                     style="height: 160px; overflow: hidden"
                   >
                     <img
@@ -80,6 +88,26 @@ onMounted(async () => {
                       alt=""
                       v-bind="props"
                     />
+                    <v-btn
+                      density="compact"
+                      width="90"
+                      height="30"
+                      variant="outlined"
+                      class="bg-white quick-view-btn"
+                      style="
+                        text-transform: none;
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
+                        border-radius: 30px;
+                        font-size: 12px;
+                        transition: 0.2s all ease-in-out;
+                        opacity: 0;
+                      "
+                      @click="openQuickView(item)"
+                      >Quick View</v-btn
+                    >
                   </div>
                 </v-hover>
                 <v-card-text class="pl-0 pb-1">
@@ -156,4 +184,12 @@ onMounted(async () => {
     </v-container>
   </div>
 </template>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.products-category {
+  .img-parent:hover {
+    .quick-view-btn {
+      opacity: 1 !important;
+    }
+  }
+}
+</style>

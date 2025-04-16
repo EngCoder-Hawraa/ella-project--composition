@@ -1,12 +1,19 @@
 <!--Composition API-->
 <script setup>
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import { defineProps } from "vue";
 
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import { Pagination, Navigation, Autoplay } from "swiper";
 import { VSkeletonLoader } from "vuetify/components";
 
+// Injected global emitter
+const Emitter = inject("Emitter");
+
+// Composition API: Methods
+function openQuickView(product) {
+  Emitter?.emit("openQuickView", product);
+}
 // تعريف المتغيرات التفاعلية
 const showenItem = ref({});
 
@@ -54,7 +61,10 @@ defineProps({
       <swiper-slide v-for="item in products" :key="item.id">
         <v-card elevation="0" class="pb-5">
           <v-hover v-slot="{ isHovering, props }">
-            <div class="img-parent" style="height: 200px; overflow: hidden">
+            <div
+              class="img-parent position-relative"
+              style="height: 200px; overflow: hidden"
+            >
               <img
                 :src="
                   showenItem[item.title]
@@ -68,6 +78,26 @@ defineProps({
                 alt=""
                 v-bind="props"
               />
+              <v-btn
+                density="compact"
+                width="60"
+                height="30"
+                variant="outlined"
+                class="bg-white quick-view-btn"
+                style="
+                  text-transform: none;
+                  position: absolute;
+                  left: 50%;
+                  top: 50%;
+                  transform: translate(-50%, -50%);
+                  border-radius: 30px;
+                  font-size: 12px;
+                  transition: 0.2s all ease-in-out;
+                  opacity: 0;
+                "
+                @click="openQuickView(item)"
+                >Quick View</v-btn
+              >
             </div>
           </v-hover>
           <v-card-text class="pl-0 pb-1">
@@ -109,9 +139,12 @@ defineProps({
                 alt=""
                 width="30"
                 height="30"
-                style="
-                  border-radius: 50%;
-                  border: 1px solid rgb(135, 135, 135);
+                style="border-radius: 50%; border: 1px solid rgb(135, 135, 135)"
+                @click="
+                  $router.push({
+                    name: 'products_details', // ✅ corrected name
+                    params: { productId: item.id },
+                  })
                 "
             /></v-btn>
           </v-btn-toggle>
@@ -160,6 +193,12 @@ defineProps({
   .swiper-pagination-bullet {
     width: 10px;
     height: 10px;
+  }
+
+  .img-parent:hover {
+    .quick-view-btn {
+      opacity: 1 !important;
+    }
   }
 }
 </style>

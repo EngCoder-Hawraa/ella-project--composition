@@ -1,18 +1,40 @@
 <!--Composition API-->
 <script setup>
-import { defineComponent } from "vue";
+import { ref, inject, onMounted } from "vue";
 import AppLayout from "@/components/global/AppLayout.vue";
+import QuickView from "@/components/global/QuickView.vue";
 
-// Using Composition API
-defineComponent({
-  components: {
-    AppLayout,
-  },
+// Inject emitter
+const Emitter = inject("Emitter");
+
+// Reactive state
+const bar = ref(false);
+const itemTitle = ref("");
+
+// Handle "showMsg" event
+onMounted(() => {
+  if (Emitter) {
+    Emitter.on("showMsg", (data) => {
+      itemTitle.value = data;
+      bar.value = true;
+    });
+  }
 });
 </script>
 <template>
   <app-layout>
     <router-view />
+    <QuickView />
+    <v-snackbar
+      v-model="bar"
+      location="left-bottom"
+      max-width="300"
+      timeout="3000"
+      >{{ itemTitle }} has been added to your cart successfully!
+      <template v-slot:actions>
+        <v-icon @click="bar = false">mdi-close</v-icon>
+      </template></v-snackbar
+    >
   </app-layout>
 </template>
 <style lang="scss">

@@ -3,6 +3,7 @@
 import { ref, inject } from "vue";
 import { useProductsStore } from "@/stores/products";
 import { storeToRefs } from "pinia";
+import { useCartStore } from "@/stores/cart";
 
 const Emitter = inject("Emitter");
 
@@ -12,7 +13,10 @@ const openCart = () => {
 
 // جلب البيانات من Pinia باستخدام storeToRefs
 const store = useProductsStore();
+const cartStore = useCartStore();
+
 const { categories } = storeToRefs(store);
+const { cartItems } = storeToRefs(cartStore);
 
 const selectedLang = ref([
   {
@@ -295,14 +299,17 @@ const langs = ref([
               </div>
               <div
                 class="wishlists d-flex flex-column align-center"
-                style="cursor: pointer"
+                :style="`cursor: pointer;pointer-events:${
+                  $route.name == 'cart_page' ? 'none' : 'unset'
+                }`"
                 @click="openCart"
               >
                 <v-badge
                   location="right top"
-                  content="2"
                   color="#205dc2"
                   offset-x="-14"
+                  :content="cartItems.length"
+                  v-if="cartItems.length"
                 ></v-badge>
                 <svg
                   viewBox="0 0 1024 1024"
