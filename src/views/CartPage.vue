@@ -62,7 +62,7 @@ const toCheckout = () => {
               :fill="
                 parseInt((calcTotalPrice / 10000) * 100) < 50
                   ? '#f44336'
-                  : parseInt((calcTotalPrice / 10000) * 100) > 50 &&
+                  : parseInt((calcTotalPrice / 10000) * 100) >= 50 &&
                     parseInt((calcTotalPrice / 10000) * 100) < 100
                   ? '#ff9800'
                   : '#4CAF50'
@@ -104,7 +104,7 @@ const toCheckout = () => {
               :color="
                 parseInt((calcTotalPrice / 10000) * 100) < 50
                   ? 'red'
-                  : parseInt((calcTotalPrice / 10000) * 100) > 50 &&
+                  : parseInt((calcTotalPrice / 10000) * 100) >= 50 &&
                     parseInt((calcTotalPrice / 10000) * 100) < 100
                   ? 'orange'
                   : 'green'

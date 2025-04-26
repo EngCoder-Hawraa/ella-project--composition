@@ -4,7 +4,7 @@ import { ref, computed, onBeforeMount, inject } from "vue";
 import { useRoute } from "vue-router";
 import { useProductsStore } from "@/stores/products";
 import { VSkeletonLoader } from "vuetify/components";
-import { cartStore } from "@/stores/cart";
+import { useCartStore } from "@/stores/cart";
 
 // Stores
 const productsStore = useProductsStore();
@@ -19,8 +19,8 @@ const tab = ref("");
 // Get route param
 const route = useRoute();
 const Emitter = inject("Emitter");
-const productId = route.params.productId;
-const cart = cartStore();
+const productId = route.query.productId;
+const cart = useCartStore();
 
 // Computed state from the store
 const singleProduct = computed(() => productsStore.singleProduct);

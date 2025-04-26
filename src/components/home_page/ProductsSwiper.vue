@@ -1,12 +1,12 @@
 <!--Composition API-->
 <script setup>
-import { ref, inject } from "vue";
+import { ref, inject, computed } from "vue";
 import { defineProps } from "vue";
 
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import { Pagination, Navigation, Autoplay } from "swiper";
 import { VSkeletonLoader } from "vuetify/components";
-
+import { useProductsStore } from "@/stores/products";
 // Injected global emitter
 const Emitter = inject("Emitter");
 
@@ -23,7 +23,14 @@ const modules = [Pagination, Navigation, Autoplay];
 // استلام الـ props
 defineProps({
   products: Array,
+  title: String,
+  titleColor: String,
+  index: Number,
 });
+
+// Pinia store access
+const productsStore = useProductsStore();
+const categories = computed(() => productsStore.categories);
 </script>
 <template>
   <div class="products-swiper pt-16 pb-5">
@@ -34,7 +41,18 @@ defineProps({
       >
         {{ title }}
       </h2>
-      <a href="#" class="text-black" style="font-size: 14px">Shop All</a>
+      <router-link
+        class="text-black"
+        style="font-size: 14px"
+        :to="{
+          name: 'products_category',
+          query: {
+            title: categories[index].title,
+            category: categories[index].route,
+          },
+        }"
+        >Shop All</router-link
+      >
     </div>
     <v-container fluid v-if="!products.length">
       <v-row>
@@ -56,7 +74,12 @@ defineProps({
       :space-between="35"
       class="pb-9 px-5"
       :navigation="{ prevIcon: '.swiper-prev', nextIcon: '.swiper-next' }"
-      :autoplay="{ delay: 3000 }"
+      :autoplay="{
+        delay: 3000,
+        pauseOnMouseEnter: true,
+        disableOnInteraction: false,
+      }"
+      :loop="true"
     >
       <swiper-slide v-for="item in products" :key="item.id">
         <v-card elevation="0" class="pb-5">
@@ -126,7 +149,7 @@ defineProps({
               }}</span
             >
           </v-card-text>
-          <v-btn-toggle v-model="showenItem[item.title]">
+          <v-btn-toggle v-model="showenItem[item.title]" mandatory>
             <v-btn
               v-for="(pic, i) in item.images"
               :value="pic"
@@ -143,7 +166,7 @@ defineProps({
                 @click="
                   $router.push({
                     name: 'products_details', // ✅ corrected name
-                    params: { productId: item.id },
+                    query: { productId: item.id },
                   })
                 "
             /></v-btn>
@@ -157,7 +180,7 @@ defineProps({
               @click="
                 $router.push({
                   name: 'products_details', // ✅ corrected name
-                  params: { productId: item.id },
+                  query: { productId: item.id },
                 })
               "
               >Choose</v-btn

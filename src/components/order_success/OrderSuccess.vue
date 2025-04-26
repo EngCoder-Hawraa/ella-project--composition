@@ -4,44 +4,34 @@ import { ref, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useCartStore } from "@/stores/cart";
 
-// props
-defineProps({
-  popup: {
-    type: Boolean,
-  },
+// define props and emits using compiler macros (no import needed)
+const props = defineProps({
+  popup: Boolean,
 });
-
-// emits
 const emit = defineEmits(["close_popup"]);
 
-// router
 const router = useRouter();
-
-// store
 const cartStore = useCartStore();
 
-// dialog state
 const dialog = ref(false);
 
-// watch dialog for closing
+// Watch for dialog close and redirect
 watch(dialog, (newVal) => {
   if (!newVal) {
     setTimeout(() => {
       emit("close_popup");
       router.push({ name: "home" });
-    }, 400); // matching v-dialog transition duration
+    }, 400);
   }
 });
 
-// reset data and close dialog
 function resetData() {
   cartStore.resetItems();
   dialog.value = false;
 }
 
-// sync initial popup state with dialog
 onMounted(() => {
-  dialog.value = popup;
+  dialog.value = props.popup;
 });
 </script>
 

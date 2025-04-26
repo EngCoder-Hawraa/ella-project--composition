@@ -78,7 +78,6 @@ const categories = ref([
         >
           Top Categories
         </h3>
-        <a href="#" class="text-black">Shop All</a>
       </div>
       <v-container fluid>
         <v-row>

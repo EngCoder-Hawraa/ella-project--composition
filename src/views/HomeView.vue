@@ -27,19 +27,32 @@ onMounted(async () => {
     <UpperBanner />
     <TheFeatures />
     <TopOffers />
+
     <ProductsComponent
+      v-if="flashDeals && flashDeals.length"
       :products="flashDeals"
       title="Flash Deals"
       titleColor="red"
+      :index="0"
     />
+
     <TopCats />
-    <NewProducts :products="newProducts" />
+    <NewProducts
+      v-if="newProducts && newProducts.length"
+      :products="newProducts"
+      :index="0"
+    />
+
     <QualityFeatures />
+
     <ProductsComponent
+      v-if="fragrances && fragrances.length"
       :products="fragrances"
       title="Top Fragrances"
       titleColor="#404040"
+      :index="1"
     />
+
     <v-container fluid>
       <v-row>
         <v-col cols="6" class="pr-5">
@@ -58,11 +71,23 @@ onMounted(async () => {
         </v-col>
       </v-row>
     </v-container>
+
     <ProductsComponent
+      v-if="furniture && furniture.length"
       :products="furniture"
       title="Top Furniture"
       titleColor="#404040"
+      :index="2"
     />
+
+    <ProductsComponent
+      v-if="groceries && groceries.length"
+      :products="groceries"
+      title="Groceries"
+      titleColor="#404040"
+      :index="3"
+    />
+
     <WhyShopwithus />
   </div>
 </template>

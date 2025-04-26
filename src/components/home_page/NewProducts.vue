@@ -1,12 +1,17 @@
 <!--Composition API-->
 <script setup>
-import { inject, ref, defineProps } from "vue";
+import { inject, ref, defineProps, computed } from "vue";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import { Pagination } from "swiper";
 import { VSkeletonLoader } from "vuetify/components";
+import { useProductsStore } from "@/stores/products";
 
-const props = defineProps({
+// استلام الـ props
+defineProps({
   products: Array,
+  title: String,
+  titleColor: String,
+  index: Number,
 });
 
 const modules = [Pagination];
@@ -19,12 +24,27 @@ const Emitter = inject("Emitter");
 function openQuickView(product) {
   Emitter?.emit("openQuickView", product);
 }
+
+// Pinia store access
+const productsStore = useProductsStore();
+const categories = computed(() => productsStore.categories);
 </script>
 <template>
   <div class="new-products pt-12">
     <div class="title px-5 d-flex align-center justify-space-between">
       <h2 style="font-weight: 900; font-size: 30px">New Products</h2>
-      <a href="#" class="text-black" style="font-size: 14px">Shop All</a>
+      <router-link
+        class="text-black"
+        style="font-size: 14px"
+        :to="{
+          name: 'products_category',
+          query: {
+            title: categories[index].title,
+            category: categories[index].route,
+          },
+        }"
+        >Shop All</router-link
+      >
     </div>
     <v-container fluid>
       <v-row>
@@ -45,11 +65,11 @@ function openQuickView(product) {
             :space-between="20"
             class="pb-9 px-5"
           >
-            <swiper-slide v-for="item in props.products" :key="item.id">
+            <swiper-slide v-for="item in products" :key="item.id">
               <v-card elevation="0" class="pb-5">
                 <v-hover v-slot="{ isHovering, props }">
                   <div
-                    class="img-parent"
+                    class="img-parent position-relative"
                     style="height: 160px; overflow: hidden"
                   >
                     <img
@@ -118,7 +138,7 @@ function openQuickView(product) {
                     }}</span
                   >
                 </v-card-text>
-                <v-btn-toggle v-model="showenItem[item.title]">
+                <v-btn-toggle v-model="showenItem[item.title]" mandatory>
                   <v-btn
                     v-for="(pic, i) in item.images"
                     :value="pic"
@@ -146,11 +166,12 @@ function openQuickView(product) {
                     @click="
                       $router.push({
                         name: 'products_details', // ✅ corrected name
-                        params: { productId: item.id },
+                        query: { productId: item.id },
                       })
                     "
-                    >Choose Options</v-btn
                   >
+                    Choose Options
+                  </v-btn>
                 </div>
               </v-card>
             </swiper-slide>

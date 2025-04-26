@@ -84,7 +84,7 @@ onMounted(() => {
             :fill="
               parseInt((calcTotalPrice / 10000) * 100) < 50
                 ? '#f44336'
-                : parseInt((calcTotalPrice / 10000) * 100) > 50 &&
+                : parseInt((calcTotalPrice / 10000) * 100) >= 50 &&
                   parseInt((calcTotalPrice / 10000) * 100) < 100
                 ? '#ff9800'
                 : '#4CAF50'
@@ -126,7 +126,7 @@ onMounted(() => {
             :color="
               parseInt((calcTotalPrice / 10000) * 100) < 50
                 ? 'red'
-                : parseInt((calcTotalPrice / 10000) * 100) > 50 &&
+                : parseInt((calcTotalPrice / 10000) * 100) >= 50 &&
                   parseInt((calcTotalPrice / 10000) * 100) < 100
                 ? 'orange'
                 : 'green'

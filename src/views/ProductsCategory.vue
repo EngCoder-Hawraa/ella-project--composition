@@ -24,20 +24,22 @@ const getProductsByCategory = async (category) => {
 
 // مراقبة التغيرات في الـ route
 const route = useRoute();
+// عند تغيير التصنيف في المسار، نجلب المنتجات
 watch(
-  () => route.params.category,
-  async () => {
-    document.documentElement.scrollTo(0, 0);
-    loading.value = true;
-    await getProductsByCategory(route.params.category);
-    loading.value = false;
-  }
+  () => route.query.category,
+  async (newCategory) => {
+    if (newCategory) {
+      document.documentElement.scrollTo(0, 0);
+      await getProductsByCategory(newCategory);
+    }
+  },
+  { immediate: true } // يبدأ مباشرة عند تحميل الصفحة
 );
 
 // استدعاء المنتجات عند تحميل المكون
 onMounted(async () => {
   loading.value = true;
-  await getProductsByCategory(route.params.category);
+  await getProductsByCategory(route.query.category);
   loading.value = false;
 });
 
@@ -51,7 +53,7 @@ function openQuickView(product) {
 </script>
 <template>
   <div class="products-category mt-10">
-    <h1 class="text-center">{{ $route.params.title }}</h1>
+    <h1 class="text-center">{{ $route.query.title }}</h1>
     <v-container>
       <v-card class="pt-5" min-height="700px" elevation="0">
         <v-row v-if="loading">
@@ -170,7 +172,7 @@ function openQuickView(product) {
                     @click="
                       $router.push({
                         name: 'products_details', // ✅ corrected name
-                        params: { productId: item.id },
+                        query: { productId: item.id },
                       })
                     "
                     >Choose Options</v-btn
