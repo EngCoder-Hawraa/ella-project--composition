@@ -4,12 +4,22 @@ import { ref, computed, onMounted, inject } from "vue";
 import { useRouter } from "vue-router";
 import { useCartStore } from "@/stores/cart";
 
+// Props
+defineProps({
+  windowWidth: {
+    type: Number,
+  },
+});
+
 // المتجر
 const cart = useCartStore();
 const router = useRouter();
 
 // القيم المُعادة
 const drawer = ref(true);
+
+// Computed Properties
+const cartItems = computed(() => cart.cartItems);
 
 // حساب السعر الكلي
 const calcTotalPrice = computed(() => {
@@ -48,7 +58,7 @@ onMounted(() => {
       location="right"
       temporary
       v-model="drawer"
-      width="370"
+      :width="windowWidth <= 767 ? windowWidth / 2 : 370"
       class="pr-1 cart-drawer"
     >
       <v-card class="px-0" elevation="0">
@@ -59,23 +69,23 @@ onMounted(() => {
           <v-icon @click="drawer = false">mdi-close</v-icon></v-card-title
         >
         <v-card-text class="px-0 py-0" style="color: #6f6f6f"
-          >{{ cart.cartItems.length }} Items</v-card-text
+          >{{ cartItems.length }} Items</v-card-text
         >
         <v-card-text
           class="px-0"
           style="color: #6f6f6f"
-          v-if="!cart.cartItems.length"
+          v-if="!cartItems.length"
           >Free shipping for all orders over $10000.00</v-card-text
         >
         <v-card-text
           class="px-0 text-center"
           style="color: #6f6f6f"
-          v-if="!cart.cartItems.length"
+          v-if="!cartItems.length"
           >Your cart is empty</v-card-text
         >
         <div
           class="bar-parent mt-4 position-relative mr-2"
-          v-if="cart.cartItems.length"
+          v-if="cartItems.length"
         >
           <svg
             class="icon-shipping-truck"
@@ -143,17 +153,17 @@ onMounted(() => {
         <v-card-text
           class="px-0 pt-2"
           style="color: #6f6f6f"
-          v-if="cart.cartItems.length && 10000 - calcTotalPrice > 0"
+          v-if="cartItems.length && 10000 - calcTotalPrice > 0"
           >Only ${{ 10000 - calcTotalPrice }} away from Free Shipping
         </v-card-text>
         <v-card-text
           class="px-0 pt-2"
           style="color: #6f6f6f"
-          v-if="cart.cartItems.length && 10000 - calcTotalPrice <= 0"
+          v-if="cartItems.length && 10000 - calcTotalPrice <= 0"
         >
           Your order now is included Free Shipping
         </v-card-text>
-        <v-card-actions v-if="!cart.cartItems.length">
+        <v-card-actions v-if="!cartItems.length">
           <v-btn
             style="
               text-transform: none;
@@ -172,7 +182,7 @@ onMounted(() => {
       <v-card
         class="pa-0 mt-5 items-card"
         elevation="0"
-        v-if="cart.cartItems.length"
+        v-if="cartItems.length"
         max-height="240"
         style="overflow-y: auto"
       >
@@ -181,14 +191,14 @@ onMounted(() => {
         >
         <v-container class="px-1">
           <v-row
-            v-for="item in cart.cartItems"
+            v-for="item in cartItems"
             :key="item.id"
             class="align-center mb-4"
           >
-            <v-col cols="5">
+            <v-col cols="12" sm="5">
               <img :src="item.thumbnail" class="w-100" alt="" />
             </v-col>
-            <v-col cols="7">
+            <v-col cols="12" sm="7">
               <v-card-title
                 class="px-0"
                 style="white-space: pre-wrap; font-size: 14px; line-height: 1.2"
@@ -246,7 +256,7 @@ onMounted(() => {
           </v-row>
         </v-container>
       </v-card>
-      <v-card class="pa-0 mt-5" elevation="0" v-if="cart.cartItems.length">
+      <v-card class="pa-0 mt-5" elevation="0" v-if="cartItems.length">
         <v-card-actions
           class="flex-column justify-center align-center"
           style="gap: 15px"
@@ -296,6 +306,19 @@ onMounted(() => {
   &::-webkit-scrollbar-track {
     width: 5px;
     background-color: rgb(227, 226, 226) !important;
+  }
+}
+
+// Media Queries
+@media (max-width: 580px) {
+  .drawer {
+    .v-card-text {
+      font-size: 12px;
+    }
+    button {
+      height: 30px !important;
+      font-size: 11px;
+    }
   }
 }
 </style>

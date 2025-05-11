@@ -1,12 +1,12 @@
 <!--Composition API-->
 <script setup>
-import { ref, inject, computed } from "vue";
+import { reactive, inject, computed } from "vue";
 import { defineProps } from "vue";
-
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import { Pagination, Navigation, Autoplay } from "swiper";
 import { VSkeletonLoader } from "vuetify/components";
 import { useProductsStore } from "@/stores/products";
+
 // Injected global emitter
 const Emitter = inject("Emitter");
 
@@ -15,9 +15,17 @@ function openQuickView(product) {
   Emitter?.emit("openQuickView", product);
 }
 // تعريف المتغيرات التفاعلية
-const showenItem = ref({});
+const showenItem = reactive({});
 
-// تعريف الـ modules
+// إعداد Breakpoints للـ Swiper
+const breakpoints = {
+  0: { slidesPerView: 1 },
+  580: { slidesPerView: 2 },
+  767: { slidesPerView: 3 },
+  990: { slidesPerView: 4 },
+};
+
+// إعداد Modules للـ Swiper
 const modules = [Pagination, Navigation, Autoplay];
 
 // استلام الـ props
@@ -28,10 +36,11 @@ defineProps({
   index: Number,
 });
 
-// Pinia store access
+// Store
 const productsStore = useProductsStore();
 const categories = computed(() => productsStore.categories);
 </script>
+
 <template>
   <div class="products-swiper pt-16 pb-5">
     <div class="title mb-10 px-5 d-flex align-center justify-space-between">
@@ -79,6 +88,7 @@ const categories = computed(() => productsStore.categories);
         pauseOnMouseEnter: true,
         disableOnInteraction: false,
       }"
+      :breakpoints="breakpoints"
       :loop="true"
     >
       <swiper-slide v-for="item in products" :key="item.id">
@@ -221,6 +231,20 @@ const categories = computed(() => productsStore.categories);
   .img-parent:hover {
     .quick-view-btn {
       opacity: 1 !important;
+    }
+  }
+}
+
+// Media Queries
+@media (max-width: 580px) {
+  .products-swiper {
+    .img-parent {
+      height: 300px !important;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      top: 60%;
     }
   }
 }

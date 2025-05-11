@@ -57,7 +57,15 @@ function openQuickView(product) {
     <v-container>
       <v-card class="pt-5" min-height="700px" elevation="0">
         <v-row v-if="loading">
-          <v-col cols="3" v-for="num in 4" :key="num">
+          <v-col
+            cols="12"
+            sm="6"
+            md="4"
+            lg="3"
+            v-for="num in 4"
+            :key="num"
+            class="px-5 mt-5 mt-lg-0"
+          >
             <v-skeleton-loader
               type="image, article, button"
             ></v-skeleton-loader>
@@ -65,10 +73,13 @@ function openQuickView(product) {
         </v-row>
         <v-row v-if="!loading">
           <v-col
-            cols="3"
+            cols="12"
+            sm="6"
+            md="4"
+            lg="3"
             v-for="item in categoryProducts.products"
             :key="item.id"
-            class="px-5"
+            class="px-10 px-sm-5 mt-8 mt-lg-0"
           >
             <v-lazy>
               <v-card elevation="0" class="pb-5">

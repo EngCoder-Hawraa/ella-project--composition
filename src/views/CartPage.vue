@@ -145,7 +145,10 @@ const toCheckout = () => {
           >
             Your Cart Is Empty!
           </v-card-text>
-          <v-card-actions class="px-0 justify-center" v-if="!cart.length">
+          <v-card-actions
+            class="px-0 justify-center"
+            v-if="!cart.cartItems.length"
+          >
             <v-btn
               class="mx-0"
               width="300"
@@ -164,7 +167,7 @@ const toCheckout = () => {
             </v-btn>
           </v-card-actions>
         </v-col>
-        <v-col cols="8" class="px-3" v-if="cart.cartItems.length">
+        <v-col cols="12" lg="8" class="px-3" v-if="cart.cartItems.length">
           <v-table class="w-100">
             <thead>
               <tr>
@@ -309,7 +312,12 @@ const toCheckout = () => {
             />
           </v-card-text>
         </v-col>
-        <v-col cols="4" class="px-3" v-if="cart.cartItems.length">
+        <v-col
+          cols="12"
+          lg="4"
+          class="px-3 mt-8 mt-lg-0"
+          v-if="cart.cartItems.length"
+        >
           <v-card elevation="0">
             <v-card-title style="font-size: 14px; font-weight: bold">
               ORDER SUMMARY
@@ -450,4 +458,13 @@ const toCheckout = () => {
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+// Media Queries
+@media (max-width: 767px) {
+  .cart-page {
+    table {
+      width: 800px !important;
+    }
+  }
+}
+</style>

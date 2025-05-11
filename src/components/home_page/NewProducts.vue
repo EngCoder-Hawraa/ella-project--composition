@@ -20,6 +20,13 @@ const showenItem = ref({});
 // Injected global emitter
 const Emitter = inject("Emitter");
 
+// إعداد Breakpoints للـ Swiper
+const breakpoints = {
+  0: { slidesPerView: 1 },
+  580: { slidesPerView: 2 },
+  1024: { slidesPerView: 3 },
+};
+
 // Composition API: Methods
 function openQuickView(product) {
   Emitter?.emit("openQuickView", product);
@@ -48,7 +55,7 @@ const categories = computed(() => productsStore.categories);
     </div>
     <v-container fluid>
       <v-row>
-        <v-col cols="7" v-if="!products.length" class="pt-14">
+        <v-col cols="12" md="7" v-if="!products.length" class="pt-14">
           <v-row>
             <v-col cols="4" v-for="num in 3" :key="num">
               <v-skeleton-loader
@@ -57,13 +64,14 @@ const categories = computed(() => productsStore.categories);
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="7" class="pt-14" v-else>
+        <v-col cols="12" md="7" class="pt-14 order-1 order-md-0" v-else>
           <Swiper
             :pagination="{ el: '.swiper-pagination', clickable: true }"
             :modules="modules"
             :slides-per-view="3"
             :space-between="20"
             class="pb-9 px-5"
+            :breakpoints="breakpoints"
           >
             <swiper-slide v-for="item in products" :key="item.id">
               <v-card elevation="0" class="pb-5">
@@ -180,7 +188,7 @@ const categories = computed(() => productsStore.categories);
             <div class="swiper-pagination"></div>
           </Swiper>
         </v-col>
-        <v-col cols="5">
+        <v-col cols="12" md="5">
           <img src="@/assets/images/vr-banner.webp" class="w-100" alt="" />
         </v-col>
       </v-row>
@@ -193,6 +201,20 @@ const categories = computed(() => productsStore.categories);
   .img-parent:hover {
     .quick-view-btn {
       opacity: 1 !important;
+    }
+  }
+}
+
+// Media Queries
+@media (max-width: 580px) {
+  .new-products {
+    .img-parent {
+      height: 300px !important;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      top: 60%;
     }
   }
 }
